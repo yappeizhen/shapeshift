@@ -42,10 +42,9 @@ export function GameCanvas({
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       const centerX = canvas.width / 2
-      // Laptop webcams sit high and rarely capture full legs. Shift down and
-      // shrink to keep targets realistic for seated/standing laptop users.
-      const centerY = canvas.height * 0.64
-      const scale = Math.min(canvas.width, canvas.height) * 0.7
+      // Laptop webcams sit high; focus on upper/three-quarter body targets.
+      const centerY = canvas.height * 0.6
+      const scale = Math.min(canvas.width, canvas.height) * 0.95
 
       // AR-style target outline over live video
       if (isPlaying && targetShape) {
@@ -75,7 +74,7 @@ function drawTargetOutline(
   centerY: number
 ) {
   // Outline grows slightly as the wall approaches
-  const outlineScale = 0.75 + progress * 0.35
+  const outlineScale = 0.85 + progress * 0.4
   const strokeWidth = 6 + progress * 6
 
   ctx.save()
@@ -122,14 +121,11 @@ function drawGingerbreadOutline(
   const rightWrist = getPos(POSE_LANDMARKS.RIGHT_WRIST)
   const leftHip = getPos(POSE_LANDMARKS.LEFT_HIP)
   const rightHip = getPos(POSE_LANDMARKS.RIGHT_HIP)
-  const leftAnkle = getPos(POSE_LANDMARKS.LEFT_ANKLE)
-  const rightAnkle = getPos(POSE_LANDMARKS.RIGHT_ANKLE)
 
   if (!nose || !leftShoulder || !rightShoulder || !leftHip || !rightHip) return
 
   const headRadius = scale * 0.08 + baseThickness * 0.6
   const armRadius = scale * 0.045 + baseThickness * 0.5
-  const legRadius = scale * 0.05 + baseThickness * 0.5
   const torsoRadius = scale * 0.09 + baseThickness * 0.7
 
   const torsoTop = {
@@ -153,10 +149,6 @@ function drawGingerbreadOutline(
   // Arms
   if (leftWrist) addCapsulePath(ctx, leftShoulder, leftWrist, armRadius)
   if (rightWrist) addCapsulePath(ctx, rightShoulder, rightWrist, armRadius)
-
-  // Legs
-  if (leftAnkle) addCapsulePath(ctx, leftHip, leftAnkle, legRadius)
-  if (rightAnkle) addCapsulePath(ctx, rightHip, rightAnkle, legRadius)
 
   ctx.stroke()
 }
