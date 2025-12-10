@@ -41,7 +41,6 @@ export function VideoOverlay({
 
     drawShape(ctx, shape, width, height)
     drawKeypoints(ctx, keypoints, width, height)
-    drawHud(ctx, { width, height, countdown, gameState, fitResult })
   }, [shape, countdown, gameState, fitResult, keypoints, videoRef])
 
   return (
@@ -123,40 +122,12 @@ function drawKeypoints(
   height: number,
 ) {
   ctx.save()
-  ctx.fillStyle = '#ffffff'
+  ctx.fillStyle = '#8ae2ff'
   keypoints.forEach((kp) => {
     ctx.beginPath()
     ctx.arc(kp.x * width, kp.y * height, 4, 0, Math.PI * 2)
     ctx.fill()
   })
-  ctx.restore()
-}
-
-function drawHud(
-  ctx: CanvasRenderingContext2D,
-  params: {
-    width: number
-    height: number
-    countdown: number
-    gameState: GameState
-    fitResult: FitResult | null
-  },
-) {
-  const { width, height: _height, countdown, gameState, fitResult } = params
-  ctx.save()
-  ctx.font = '600 48px "Inter", system-ui, sans-serif'
-  ctx.textAlign = 'center'
-  ctx.shadowColor = 'rgba(0,0,0,0.6)'
-  ctx.shadowBlur = 12
-  ctx.fillStyle = '#f6f8fb'
-
-  if (gameState === 'countdown') {
-    ctx.fillText(`${countdown}s`, width / 2, 72)
-  } else if (gameState === 'feedback') {
-    const label = fitResult?.pass ? 'Fit!' : 'Try again'
-    ctx.fillStyle = fitResult?.pass ? '#7cf7c1' : '#ffb4b4'
-    ctx.fillText(label, width / 2, 72)
-  }
   ctx.restore()
 }
 

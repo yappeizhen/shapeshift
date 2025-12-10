@@ -169,8 +169,7 @@ function App() {
     <div className="app">
       <header className="topbar">
       <div>
-          <p className="eyebrow">Shapeshift</p>
-          <h1>Half-body hole-in-the-wall</h1>
+          <h1>Shapeshift</h1>
           <p className="subtitle">
             Align yourself inside the glowing outline before the timer ends.
           </p>
@@ -197,32 +196,33 @@ function App() {
           fitResult={fitResult}
           keypoints={keypoints}
         />
-        <aside className="hud">
-          <div className="status-block">
-            <p className="label">Status</p>
-            <p className="value">{statusText}</p>
-          </div>
-          <div className="status-grid">
-            <div>
-              <p className="label">Countdown</p>
-              <p className="value">{gameState === 'countdown' ? countdown : '-'}</p>
-            </div>
-            <div>
-              <p className="label">Fit</p>
-              <p className={`value ${fitResult?.pass ? 'positive' : ''}`}>
-                {fitResult
-                  ? `${Math.round(fitResult.insideRatio * 100)}% inside`
-                  : '—'}
-        </p>
-      </div>
-          </div>
-          <p className="helper">
-            Tip: keep upper body in frame; stretch creatively as long as all
-            keypoints stay inside the outline.
-          </p>
-          {cameraError && <p className="error">Camera error: {cameraError}</p>}
-        </aside>
       </main>
+
+      <footer className="footer">
+        <div className="info-row">
+          <div className="pill">
+            <span className="label">Status</span>
+            <span className="value">{statusText}</span>
+          </div>
+          <div className="pill">
+            <span className="label">Countdown</span>
+            <span className="value">
+              {gameState === 'countdown' ? `${countdown}s` : '—'}
+            </span>
+          </div>
+          <div className="pill">
+            <span className="label">Fit</span>
+            <span className={`value ${fitResult?.pass ? 'positive' : ''}`}>
+              {fitResult ? `${Math.round(fitResult.insideRatio * 100)}%` : '—'}
+            </span>
+          </div>
+          {cameraError && <span className="error">Camera error: {cameraError}</span>}
+        </div>
+        <p className="helper">
+          Tip: keep upper body in frame; stretch creatively as long as all keypoints
+          stay inside the outline.
+        </p>
+      </footer>
     </div>
   )
 }
