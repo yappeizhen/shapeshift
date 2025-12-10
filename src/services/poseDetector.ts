@@ -30,7 +30,7 @@ export class PoseDetectorService {
   ): Promise<poseDetection.Keypoint[] | null> {
     if (!this.detector) return null
     const poses = await this.detector.estimatePoses(video, {
-      flipHorizontal: true,
+      flipHorizontal: false,
     })
     const pose = poses[0]
     if (!pose) return null

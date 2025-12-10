@@ -227,6 +227,7 @@ h1 {
   display: block;
   object-fit: cover;
   background: #000;
+  transform: scaleX(-1);
 }
 
 .overlay {
@@ -236,6 +237,7 @@ h1 {
   height: 100%;
   pointer-events: none;
   z-index: 4;
+  transform: scaleX(-1);
 }
 
 .hud {
