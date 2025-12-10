@@ -14,6 +14,9 @@ interface VideoOverlayProps {
   countdown: number
   fitResult: FitResult | null
   keypoints: NormalizedKeypoint[]
+  lives: number
+  initialLives: number
+  score: number
 }
 
 export function VideoOverlay({
@@ -23,6 +26,9 @@ export function VideoOverlay({
   countdown,
   fitResult,
   keypoints,
+  lives,
+  initialLives,
+  score,
 }: VideoOverlayProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -61,6 +67,28 @@ export function VideoOverlay({
           {fitResult.pass ? 'Perfect!' : 'Try Again'}
         </div>
       )}
+
+      <div className="hud">
+        <div className="hud-block hud-hearts">
+          <div className="hud-label">Lives</div>
+          <div className="hud-row">
+            {Array.from({ length: initialLives }).map((_, i) => {
+              const filled = i < lives
+              return (
+                <span key={i} className={`hud-heart ${filled ? 'full' : 'lost'}`} aria-hidden>
+                  ♥
+                </span>
+              )
+            })}
+            <span className="sr-only">{lives} lives remaining</span>
+          </div>
+        </div>
+
+        <div className="hud-block hud-score">
+          <div className="hud-label">Score</div>
+          <div className="hud-value">{score}</div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -11,7 +11,7 @@ import {
 } from './game/stateMachine'
 import { poseDetector } from './services/poseDetector'
 
-const INITIAL_LIVES = 3
+const INITIAL_LIVES = 5
 const SCORE_REWARD = 1
 
 function App() {
@@ -230,14 +230,6 @@ function App() {
               {shapeIndex + 1}/{shapes.length}
             </span>
           </div>
-          <div className="pill">
-            <span className="label">Lives</span>
-            <span className="value">{lives}</span>
-          </div>
-          <div className="pill">
-            <span className="label">Score</span>
-            <span className="value">{score}</span>
-          </div>
           <button
             className="ghost"
             onClick={handleSkip}
@@ -264,6 +256,9 @@ function App() {
           countdown={countdown}
           fitResult={fitResult}
           keypoints={keypoints}
+          lives={lives}
+          initialLives={INITIAL_LIVES}
+          score={score}
         />
         {gameState === 'idle' && (
           <div className="start-overlay">

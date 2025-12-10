@@ -33,13 +33,15 @@
 
 h1 {
   margin: 0;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  background: linear-gradient(120deg, #5cf0ff 0%, #ff6bd6 45%, #ffd166 90%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: none;
-  filter: drop-shadow(0 0 20px rgba(0, 245, 212, 0.3));
+  text-shadow:
+    0 0 14px rgba(92, 240, 255, 0.45),
+    0 0 24px rgba(255, 107, 214, 0.35);
+  filter: drop-shadow(0 0 24px rgba(255, 107, 214, 0.25));
 }
 
 .subtitle {
@@ -234,6 +236,92 @@ h1 {
   height: 100%;
   pointer-events: none;
   z-index: 4;
+}
+
+.hud {
+  position: absolute;
+  inset: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.hud-block {
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 245, 212, 0.35);
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(0, 245, 212, 0.15);
+  backdrop-filter: blur(10px);
+  min-width: 120px;
+  max-width: 220px;
+}
+
+.hud-hearts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hud-score {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+.hud-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  max-width: 100%;
+}
+
+.hud-heart {
+  font-size: 1rem;
+  line-height: 1;
+  color: rgba(255, 42, 109, 0.9);
+  text-shadow:
+    0 0 12px rgba(255, 42, 109, 0.5),
+    0 0 24px rgba(255, 42, 109, 0.35);
+}
+
+.hud-heart.lost {
+  color: rgba(255, 255, 255, 0.35);
+  text-shadow: none;
+}
+
+.hud-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hud-value {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 16px rgba(0, 245, 212, 0.35);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 .start-overlay {
