@@ -231,6 +231,29 @@ function App() {
           fitResult={fitResult}
           keypoints={keypoints}
         />
+        {gameState === 'idle' && (
+          <div className="start-overlay">
+            <div className="start-card">
+              <p className="eyebrow">Ready?</p>
+              <h2>Shapeshift Game</h2>
+              <p className="helper">
+                Stand where the camera can see you. When you hit start, match the glowing shapes
+                before time runs out.
+              </p>
+              <div className="start-actions">
+                <button
+                  className="primary"
+                  onClick={handleStart}
+                  disabled={!streamReady}
+                  type="button"
+                >
+                  Start Game
+                </button>
+                <span className="hint">{streamReady ? 'Camera ready' : 'Waiting for camera…'}</span>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
       <footer className="footer">

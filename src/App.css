@@ -236,6 +236,63 @@ h1 {
   z-index: 4;
 }
 
+.start-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 40%, rgba(0, 245, 212, 0.12), transparent 55%),
+    radial-gradient(circle at 50% 60%, rgba(255, 42, 109, 0.10), transparent 65%),
+    rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+}
+
+.start-card {
+  max-width: 520px;
+  width: 100%;
+  padding: 28px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 245, 212, 0.25);
+  box-shadow:
+    0 18px 60px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(0, 245, 212, 0.15);
+  text-align: center;
+}
+
+.start-card h2 {
+  margin: 6px 0 10px;
+  font-size: clamp(1.6rem, 3vw, 2rem);
+}
+
+.start-card .helper {
+  margin: 0 0 16px;
+  color: var(--text-secondary);
+}
+
+.start-card .eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  color: var(--neon-cyan);
+}
+
+.start-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.start-actions .hint {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
 /* ===== COUNTDOWN BADGE ===== */
 .countdown-badge {
   position: absolute;
