@@ -57,12 +57,10 @@ export function getDefaultShapes(): ShapeConfig[] {
   return [
     makeTriangle(),
     makeTallRect(),
-    makeThinRect(),
     makeBubbleT(),
     makeBubbleY(),
     makeBubbleF(),
     makeFlippedL(),
-    makeSuperThin(),
   ]
 }
 
@@ -85,27 +83,15 @@ function makeTallRect(): ShapeConfig {
     name: 'Tall Rectangle',
     kind: 'rect',
     center: { x: 0.5, y: FLOOR_Y - 0.3 },
-    width: 0.44,
-    height: 0.6,
-    cornerRadius: 0,
-  }
-}
-
-function makeThinRect(): ShapeConfig {
-  return {
-    id: 'rectangle-thin',
-    name: 'Thin Rectangle (Tall)',
-    kind: 'rect',
-    center: { x: 0.5, y: FLOOR_Y - 0.09 },
-    width: 0.35,
-    height: 0.18,
+    width: 0.2,
+    height: 0.8,
     cornerRadius: 0,
   }
 }
 
 function makeBubbleT(): ShapeConfig {
-  const top = 0.52
-  const stemTop = 0.6
+  const top = 0.3
+  const stemTop = 0.5
   const stemBottom = FLOOR_Y
   return {
     id: 'shape-t',
@@ -147,56 +133,44 @@ function makeBubbleY(): ShapeConfig {
 }
 
 function makeBubbleF(): ShapeConfig {
-  const top = 0.52
-  const mid = 0.68
-  const low = 0.82
+  const top = 0.32
+  const mid = 0.48
+  const low = 0.62
   const bottom = FLOOR_Y
   return {
     id: 'shape-f',
     name: 'Bubble F',
     kind: 'polygon',
     points: [
-      { x: 0.18, y: top },
-      { x: 0.72, y: top },
-      { x: 0.72, y: 0.6 },
-      { x: 0.44, y: 0.6 },
-      { x: 0.44, y: mid },
-      { x: 0.68, y: mid },
-      { x: 0.68, y: low },
-      { x: 0.44, y: low },
-      { x: 0.44, y: bottom },
-      { x: 0.18, y: bottom },
+      { x: 0.14, y: top },
+      { x: 0.68, y: top },
+      { x: 0.70, y: 0.4 },
+      { x: 0.41, y: 0.4 },
+      { x: 0.41, y: mid },
+      { x: 0.65, y: mid },
+      { x: 0.65, y: low },
+      { x: 0.36, y: low },
+      { x: 0.36, y: bottom },
+      { x: 0.14, y: bottom },
     ],
   }
 }
 
-function makeSuperThin(): ShapeConfig {
-  return {
-    id: 'shape-thin-rect',
-    name: 'Super Thin Rect',
-    kind: 'rect',
-    center: { x: 0.5, y: FLOOR_Y - 0.07 },
-    width: 0.36,
-    height: 0.14,
-    cornerRadius: 0,
-  }
-}
-
 function makeFlippedL(): ShapeConfig {
-  const top = 0.52
+  const top = 0.2
   const bottom = FLOOR_Y
-  const footBottom = top + 0.04
+  const footBottom = top + 0.20
   return {
     id: 'shape-flipped-l',
     name: 'Flipped L',
     kind: 'polygon',
     points: [
-      { x: 0.24, y: top },
-      { x: 0.80, y: top },
-      { x: 0.80, y: footBottom },
-      { x: 0.54, y: footBottom },
-      { x: 0.54, y: bottom },
-      { x: 0.24, y: bottom },
+      { x: 0.25, y: top },
+      { x: 0.55, y: top },
+      { x: 0.55, y: footBottom },
+      { x: 0.4, y: footBottom },
+      { x: 0.4, y: bottom },
+      { x: 0.25, y: bottom },
     ],
   }
 }

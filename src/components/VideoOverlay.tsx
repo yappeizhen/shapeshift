@@ -96,22 +96,26 @@ function drawShape(
       Math.PI * 2,
     )
   } else if (shape.kind === 'rect') {
+    const halfW = shape.width / 2
+    const halfH = shape.height / 2
+    const points: Vec2[] = [
+      { x: shape.center.x - halfW, y: shape.center.y - halfH },
+      { x: shape.center.x + halfW, y: shape.center.y - halfH },
+      { x: shape.center.x + halfW, y: shape.center.y + halfH },
+      { x: shape.center.x - halfW, y: shape.center.y + halfH },
+    ]
     const w = shape.width * width
     const h = shape.height * height
-    const x = shape.center.x * width - w / 2
-    const y = shape.center.y * height - h / 2
     const r = Math.min(shape.cornerRadius ?? 0, Math.min(w, h) / 2)
     if (r > 0) {
+      const x = shape.center.x * width - w / 2
+      const y = shape.center.y * height - h / 2
       roundedRect(ctx, x, y, w, h, r)
     } else {
-      ctx.rect(x, y, w, h)
+      drawPolygon(ctx, points, width, height)
     }
   } else if (shape.kind === 'triangle') {
-    const [p0, p1, p2] = shape.points
-    ctx.moveTo(p0.x * width, p0.y * height)
-    ctx.lineTo(p1.x * width, p1.y * height)
-    ctx.lineTo(p2.x * width, p2.y * height)
-    ctx.closePath()
+    drawPolygon(ctx, shape.points, width, height)
   } else if (shape.kind === 'polygon') {
     drawPolygon(ctx, shape.points, width, height)
   } else if (shape.kind === 'curve') {
