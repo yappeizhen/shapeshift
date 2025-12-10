@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { VideoOverlay } from './components/VideoOverlay'
-import { evaluateFit, getDefaultShapes } from './game/shapeLogic'
-import type { FitResult, NormalizedKeypoint } from './game/shapeLogic'
+import { evaluateFit, getDefaultShapes, randomizeShapeHorizontal } from './game/shapeLogic'
+import type { FitResult, NormalizedKeypoint, ShapeConfig } from './game/shapeLogic'
 import {
   COUNTDOWN_SECONDS,
   FEEDBACK_MS,
@@ -18,6 +18,9 @@ function App() {
   const [keypoints, setKeypoints] = useState<NormalizedKeypoint[]>([])
   const shapes = useMemo(() => getDefaultShapes(), [])
   const [shapeIndex, setShapeIndex] = useState(0)
+  const [shapeVariant, setShapeVariant] = useState<ShapeConfig>(() =>
+    randomizeShapeHorizontal(getDefaultShapes()[0], 0.1),
+  )
   const [gameState, setGameState] = useState<GameState>('idle')
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS)
   const [fitResult, setFitResult] = useState<FitResult | null>(null)
@@ -131,12 +134,15 @@ function App() {
     }
   }, [countdown, gameState])
 
+  useEffect(() => {
+    setShapeVariant(randomizeShapeHorizontal(shapes[shapeIndex], 0.1))
+  }, [shapeIndex, shapes])
+
   const runEvaluation = (roundId: number) => {
     if (evaluatingRef.current) return
     evaluatingRef.current = true
 
-    const shape = shapes[shapeIndex]
-    const result = evaluateFit(shape, keypoints, {
+    const result = evaluateFit(shapeVariant, keypoints, {
       minScore: 0.25,
       tolerance: 0.04,
     })
@@ -225,7 +231,7 @@ function App() {
       <main className="stage">
         <VideoOverlay
           videoRef={videoRef}
-          shape={shapes[shapeIndex]}
+          shape={shapeVariant}
           gameState={gameState}
           countdown={countdown}
           fitResult={fitResult}

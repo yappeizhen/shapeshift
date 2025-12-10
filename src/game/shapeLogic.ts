@@ -52,6 +52,54 @@ export interface FitResult {
 }
 
 const FLOOR_Y = 0.95
+const HORIZONTAL_PADDING = 0.1
+
+type Bounds = { minX: number; maxX: number }
+
+function getShapeBounds(shape: ShapeConfig): Bounds {
+  if (shape.kind === 'circle') {
+    return { minX: shape.center.x - shape.radius, maxX: shape.center.x + shape.radius }
+  }
+  if (shape.kind === 'rect') {
+    const halfW = shape.width / 2
+    return { minX: shape.center.x - halfW, maxX: shape.center.x + halfW }
+  }
+  if (shape.kind === 'triangle' || shape.kind === 'polygon') {
+    const xs = shape.points.map((p) => p.x)
+    return { minX: Math.min(...xs), maxX: Math.max(...xs) }
+  }
+  // Curve not currently used; default safe bounds
+  return { minX: 0, maxX: 1 }
+}
+
+function shiftShape(shape: ShapeConfig, dx: number): ShapeConfig {
+  if (dx === 0) return shape
+  if (shape.kind === 'circle') {
+    return { ...shape, center: { ...shape.center, x: shape.center.x + dx } }
+  }
+  if (shape.kind === 'rect') {
+    return { ...shape, center: { ...shape.center, x: shape.center.x + dx } }
+  }
+  if (shape.kind === 'triangle') {
+    return {
+      ...shape,
+      points: shape.points.map((p) => ({ ...p, x: p.x + dx })) as [Vec2, Vec2, Vec2],
+    }
+  }
+  if (shape.kind === 'polygon') {
+    return { ...shape, points: shape.points.map((p) => ({ ...p, x: p.x + dx })) }
+  }
+  return shape
+}
+
+export function randomizeShapeHorizontal(shape: ShapeConfig, padding: number = HORIZONTAL_PADDING) {
+  const bounds = getShapeBounds(shape)
+  const minShift = padding - bounds.minX
+  const maxShift = 1 - padding - bounds.maxX
+  if (minShift >= maxShift) return shape
+  const delta = minShift + Math.random() * (maxShift - minShift)
+  return shiftShape(shape, delta)
+}
 
 export function getDefaultShapes(): ShapeConfig[] {
   return [
