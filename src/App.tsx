@@ -11,6 +11,9 @@ import {
 } from './game/stateMachine'
 import { poseDetector } from './services/poseDetector'
 
+const INITIAL_LIVES = 3
+const SCORE_REWARD = 1
+
 function App() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [streamReady, setStreamReady] = useState(false)
@@ -21,6 +24,8 @@ function App() {
   const [shapeVariant, setShapeVariant] = useState<ShapeConfig>(() =>
     randomizeShapeHorizontal(getDefaultShapes()[0], 0.1),
   )
+  const [lives, setLives] = useState(INITIAL_LIVES)
+  const [score, setScore] = useState(0)
   const [gameState, setGameState] = useState<GameState>('idle')
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS)
   const [fitResult, setFitResult] = useState<FitResult | null>(null)
@@ -146,12 +151,24 @@ function App() {
       minScore: 0.25,
       tolerance: 0.04,
     })
+    const nextLives = result.pass ? lives : Math.max(0, lives - 1)
+    if (result.pass) {
+      setScore((prev) => prev + SCORE_REWARD)
+    }
+    if (nextLives !== lives) {
+      setLives(nextLives)
+    }
     setFitResult(result)
     setGameState('feedback')
 
     feedbackTimerRef.current = window.setTimeout(() => {
       evaluatingRef.current = false
       roundRef.current = roundId + 1
+      const outOfLives = nextLives <= 0
+      if (outOfLives) {
+        setGameState('idle')
+        return
+      }
       setCountdown(COUNTDOWN_SECONDS)
       setShapeIndex((prev) => nextShapeIndex(prev, shapes.length))
       setFitResult(null)
@@ -175,6 +192,8 @@ function App() {
   const handleStart = async () => {
     roundRef.current += 1
     evaluatingRef.current = false
+    setLives(INITIAL_LIVES)
+    setScore(0)
     setCountdown(COUNTDOWN_SECONDS)
     if (videoRef.current && videoRef.current.paused) {
       try {
@@ -184,6 +203,7 @@ function App() {
       }
     }
     setShapeIndex(0)
+    setShapeVariant(randomizeShapeHorizontal(shapes[0], 0.1))
     setFitResult(null)
     setGameState('countdown')
   }
@@ -209,6 +229,14 @@ function App() {
             <span className="value">
               {shapeIndex + 1}/{shapes.length}
             </span>
+          </div>
+          <div className="pill">
+            <span className="label">Lives</span>
+            <span className="value">{lives}</span>
+          </div>
+          <div className="pill">
+            <span className="label">Score</span>
+            <span className="value">{score}</span>
           </div>
           <button
             className="ghost"

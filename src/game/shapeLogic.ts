@@ -118,9 +118,9 @@ function makeTriangle(): ShapeConfig {
     name: 'Triangle',
     kind: 'triangle',
     points: [
-      { x: 0.5, y: 0.52 },
-      { x: 0.15, y: FLOOR_Y },
-      { x: 0.85, y: FLOOR_Y },
+      { x: 0.3, y: 0.2 },
+      { x: 0.1, y: FLOOR_Y },
+      { x: 0.5, y: FLOOR_Y },
     ],
   }
 }

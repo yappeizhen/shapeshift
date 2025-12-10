@@ -337,6 +337,8 @@ h1 {
   font-size: 1.1rem;
   color: white;
   letter-spacing: 0.05em;
+  min-width: 3ch;
+  text-align: center;
 }
 
 .clock-icon {
