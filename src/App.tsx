@@ -22,6 +22,8 @@ function App() {
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS)
   const [fitResult, setFitResult] = useState<FitResult | null>(null)
   const feedbackTimerRef = useRef<number | null>(null)
+  const roundRef = useRef(0)
+  const evaluatingRef = useRef(false)
 
   // Set up webcam stream
   useEffect(() => {
@@ -123,11 +125,16 @@ function App() {
 
   useEffect(() => {
     if (gameState === 'countdown' && countdown === 0) {
-      runEvaluation()
+      if (!evaluatingRef.current) {
+        runEvaluation(roundRef.current)
+      }
     }
   }, [countdown, gameState])
 
-  const runEvaluation = () => {
+  const runEvaluation = (roundId: number) => {
+    if (evaluatingRef.current) return
+    evaluatingRef.current = true
+
     const shape = shapes[shapeIndex]
     const result = evaluateFit(shape, keypoints, {
       minScore: 0.25,
@@ -137,13 +144,32 @@ function App() {
     setGameState('feedback')
 
     feedbackTimerRef.current = window.setTimeout(() => {
+      evaluatingRef.current = false
+      roundRef.current = roundId + 1
+      setCountdown(COUNTDOWN_SECONDS)
       setShapeIndex((prev) => nextShapeIndex(prev, shapes.length))
       setFitResult(null)
       setGameState('countdown')
     }, FEEDBACK_MS)
   }
 
+  const handleSkip = () => {
+    if (feedbackTimerRef.current) {
+      window.clearTimeout(feedbackTimerRef.current)
+      feedbackTimerRef.current = null
+    }
+    evaluatingRef.current = false
+    roundRef.current += 1
+    setFitResult(null)
+    setCountdown(COUNTDOWN_SECONDS)
+    setShapeIndex((prev) => nextShapeIndex(prev, shapes.length))
+    setGameState('countdown')
+  }
+
   const handleStart = async () => {
+    roundRef.current += 1
+    evaluatingRef.current = false
+    setCountdown(COUNTDOWN_SECONDS)
     if (videoRef.current && videoRef.current.paused) {
       try {
         await videoRef.current.play()
@@ -178,6 +204,14 @@ function App() {
               {shapeIndex + 1}/{shapes.length}
             </span>
           </div>
+          <button
+            className="ghost"
+            onClick={handleSkip}
+            disabled={!streamReady}
+            type="button"
+          >
+            Skip
+          </button>
           <button
             className="primary"
             onClick={handleStart}

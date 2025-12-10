@@ -3,6 +3,7 @@ import type {
   FitResult,
   NormalizedKeypoint,
   ShapeConfig,
+  Vec2,
 } from '../game/shapeLogic'
 import type { GameState } from '../game/stateMachine'
 
@@ -39,7 +40,7 @@ export function VideoOverlay({
 
     ctx.clearRect(0, 0, width, height)
 
-    drawShape(ctx, shape, width, height, gameState, fitResult)
+    drawShape(ctx, shape, width, height, gameState)
     drawKeypoints(ctx, keypoints, width, height)
   }, [shape, countdown, gameState, fitResult, keypoints, videoRef])
 
@@ -70,7 +71,6 @@ function drawShape(
   width: number,
   height: number,
   gameState: GameState,
-  _fitResult: FitResult | null,
 ) {
   // Hide outline during feedback to let the badge take focus
   if (gameState === 'feedback') return
@@ -112,6 +112,10 @@ function drawShape(
     ctx.lineTo(p1.x * width, p1.y * height)
     ctx.lineTo(p2.x * width, p2.y * height)
     ctx.closePath()
+  } else if (shape.kind === 'polygon') {
+    drawPolygon(ctx, shape.points, width, height)
+  } else if (shape.kind === 'curve') {
+    drawCurveBand(ctx, shape.points, width, height, shape.thickness, strokeColor, glowColor)
   }
 
   ctx.stroke()
@@ -175,5 +179,55 @@ function drawKeypoints(
     ctx.fill()
   })
   
+  ctx.restore()
+}
+
+function drawPolygon(
+  ctx: CanvasRenderingContext2D,
+  points: Vec2[],
+  width: number,
+  height: number,
+) {
+  if (points.length < 3) return
+  const scaled = points.map((p) => ({ x: p.x * width, y: p.y * height }))
+  ctx.beginPath()
+  ctx.moveTo(scaled[0].x, scaled[0].y)
+  for (let i = 1; i < scaled.length; i++) {
+    ctx.lineTo(scaled[i].x, scaled[i].y)
+  }
+  ctx.closePath()
+}
+
+function drawCurveBand(
+  ctx: CanvasRenderingContext2D,
+  points: Vec2[],
+  width: number,
+  height: number,
+  thickness: number,
+  strokeColor: string,
+  glowColor: string,
+) {
+  if (points.length < 2) return
+  const scaled = points.map((p) => ({ x: p.x * width, y: p.y * height }))
+  const band = thickness * Math.min(width, height) * 2
+
+  ctx.save()
+  ctx.beginPath()
+  ctx.moveTo(scaled[0].x, scaled[0].y)
+  for (let i = 1; i < scaled.length; i++) {
+    const prev = scaled[i - 1]
+    const curr = scaled[i]
+    const midX = (prev.x + curr.x) / 2
+    const midY = (prev.y + curr.y) / 2
+    ctx.quadraticCurveTo(prev.x, prev.y, midX, midY)
+  }
+
+  ctx.strokeStyle = strokeColor
+  ctx.lineWidth = band
+  ctx.lineCap = 'round'
+  ctx.lineJoin = 'round'
+  ctx.shadowColor = glowColor
+  ctx.shadowBlur = 40
+  ctx.stroke()
   ctx.restore()
 }

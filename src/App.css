@@ -107,6 +107,35 @@ h1 {
   filter: grayscale(0.5);
 }
 
+.ghost {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 245, 212, 0.25);
+  color: var(--text-primary);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 120ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.ghost:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(0, 245, 212, 0.5);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.ghost:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.ghost:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 /* ===== PILLS / BADGES ===== */
 .pill {
   background: rgba(0, 0, 0, 0.5);
