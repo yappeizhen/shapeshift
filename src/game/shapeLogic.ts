@@ -33,8 +33,8 @@ export type ShapeConfig =
       id: string
       name: string
       kind: 'curve'
-      points: Vec2[] // centerline points
-      thickness: number // normalized half-width of band
+      points: Vec2[]
+      thickness: number
     }
 
 export type NormalizedKeypoint = Vec2 & { score?: number; name?: string }
@@ -55,132 +55,150 @@ const FLOOR_Y = 0.9
 
 export function getDefaultShapes(): ShapeConfig[] {
   return [
-    {
-      id: 'triangle-wide',
-      name: 'Triangle',
-      kind: 'triangle',
-      points: [
-        { x: 0.5, y: 0.52 },
-        { x: 0.15, y: 0.98 },
-        { x: 0.85, y: 0.98 },
-      ],
-    },
-    {
-      id: 'door-rect',
-      name: 'Tall Rectangle',
-      kind: 'rect',
-      center: { x: 0.5, y: 0.78 },
-      width: 0.60,
-      height: 0.44,
-      cornerRadius: 0,
-    },
-    {
-      id: 'rectangle-thin',
-      name: 'Thin Rectangle (Tall)',
-      kind: 'rect',
-      center: { x: 0.5, y: 0.80 },
-      width: 0.18,
-      height: 0.35,
-      cornerRadius: 0,
-    },
-    {
-      id: 'shape-t',
-      name: 'Bubble T',
-      kind: 'polygon',
-      points: [
-        { x: 0.2, y: 0.52 },
-        { x: 0.8, y: 0.52 },
-        { x: 0.8, y: 0.60 },
-        { x: 0.6, y: 0.60 },
-        { x: 0.6, y: 0.96 },
-        { x: 0.4, y: 0.96 },
-        { x: 0.4, y: 0.60 },
-        { x: 0.2, y: 0.60 },
-      ],
-    },
-    {
-      id: 'shape-y',
-      name: 'Bubble Y',
-      kind: 'polygon',
-      points: [
-        { x: 0.28, y: 0.52 },
-        { x: 0.44, y: 0.64 },
-        { x: 0.44, y: 0.96 },
-        { x: 0.56, y: 0.96 },
-        { x: 0.56, y: 0.64 },
-        { x: 0.72, y: 0.52 },
-        { x: 0.62, y: 0.52 },
-        { x: 0.50, y: 0.64 },
-        { x: 0.38, y: 0.52 },
-      ],
-    },
-    {
-      id: 'shape-v',
-      name: 'Bubble V',
-      kind: 'polygon',
-      points: [
-        { x: 0.18, y: 0.52 },
-        { x: 0.36, y: 0.52 },
-        { x: 0.50, y: 0.98 },
-        { x: 0.64, y: 0.52 },
-        { x: 0.82, y: 0.52 },
-        { x: 0.56, y: 0.98 },
-        { x: 0.44, y: 0.98 },
-      ],
-    },
-    {
-      id: 'shape-f',
-      name: 'Bubble F',
-      kind: 'polygon',
-      points: [
-        { x: 0.24, y: 0.52 },
-        { x: 0.68, y: 0.52 },
-        { x: 0.68, y: 0.62 },
-        { x: 0.44, y: 0.62 },
-        { x: 0.44, y: 0.74 },
-        { x: 0.64, y: 0.74 },
-        { x: 0.64, y: 0.84 },
-        { x: 0.44, y: 0.84 },
-        { x: 0.44, y: 0.98 },
-        { x: 0.24, y: 0.98 },
-      ],
-    },
-    {
-      id: 'shape-inv-l',
-      name: 'Inverted L',
-      kind: 'polygon',
-      points: [
-        { x: 0.68, y: 0.52 },
-        { x: 0.48, y: 0.52 },
-        { x: 0.48, y: 0.90 },
-        { x: 0.26, y: 0.90 },
-        { x: 0.26, y: 0.98 },
-        { x: 0.68, y: 0.98 },
-      ],
-    },
-    {
-      id: 'shape-thin-rect',
-      name: 'Super Thin Rect',
-      kind: 'rect',
-      center: { x: 0.5, y: 0.82 },
-      width: 0.14,
-      height: 0.36,
-      cornerRadius: 0,
-    },
-    {
-      id: 'shape-arch',
-      name: 'Curved Arch',
-      kind: 'curve',
-      points: [
-        { x: 0.2, y: 0.98 },
-        { x: 0.35, y: 0.76 },
-        { x: 0.50, y: 0.66 },
-        { x: 0.65, y: 0.76 },
-        { x: 0.80, y: 0.98 },
-      ],
-      thickness: 0.08,
-    },
+    makeTriangle(),
+    makeTallRect(),
+    makeThinRect(),
+    makeBubbleT(),
+    makeBubbleY(),
+    makeBubbleF(),
+    makeFlippedL(),
+    makeSuperThin(),
   ]
+}
+
+function makeTriangle(): ShapeConfig {
+  return {
+    id: 'triangle-wide',
+    name: 'Triangle',
+    kind: 'triangle',
+    points: [
+      { x: 0.5, y: 0.52 },
+      { x: 0.15, y: FLOOR_Y },
+      { x: 0.85, y: FLOOR_Y },
+    ],
+  }
+}
+
+function makeTallRect(): ShapeConfig {
+  return {
+    id: 'door-rect',
+    name: 'Tall Rectangle',
+    kind: 'rect',
+    center: { x: 0.5, y: 0.78 },
+    width: 0.44,
+    height: 0.6,
+    cornerRadius: 0,
+  }
+}
+
+function makeThinRect(): ShapeConfig {
+  return {
+    id: 'rectangle-thin',
+    name: 'Thin Rectangle (Tall)',
+    kind: 'rect',
+    center: { x: 0.5, y: 0.8 },
+    width: 0.35,
+    height: 0.18,
+    cornerRadius: 0,
+  }
+}
+
+function makeBubbleT(): ShapeConfig {
+  const top = 0.52
+  const stemTop = 0.6
+  const stemBottom = FLOOR_Y
+  return {
+    id: 'shape-t',
+    name: 'Bubble T',
+    kind: 'polygon',
+    points: [
+      { x: 0.2, y: top },
+      { x: 0.8, y: top },
+      { x: 0.8, y: stemTop },
+      { x: 0.6, y: stemTop },
+      { x: 0.6, y: stemBottom },
+      { x: 0.4, y: stemBottom },
+      { x: 0.4, y: stemTop },
+      { x: 0.2, y: stemTop },
+    ],
+  }
+}
+
+function makeBubbleY(): ShapeConfig {
+  const top = 0.52
+  const junction = 0.64
+  const bottom = FLOOR_Y
+  return {
+    id: 'shape-y',
+    name: 'Bubble Y',
+    kind: 'polygon',
+    points: [
+      { x: 0.24, y: top },
+      { x: 0.44, y: junction },
+      { x: 0.44, y: bottom },
+      { x: 0.56, y: bottom },
+      { x: 0.56, y: junction },
+      { x: 0.76, y: top },
+      { x: 0.64, y: top },
+      { x: 0.50, y: 0.66 },
+      { x: 0.36, y: top },
+    ],
+  }
+}
+
+function makeBubbleF(): ShapeConfig {
+  const top = 0.52
+  const mid = 0.68
+  const low = 0.82
+  const bottom = FLOOR_Y
+  return {
+    id: 'shape-f',
+    name: 'Bubble F',
+    kind: 'polygon',
+    points: [
+      { x: 0.18, y: top },
+      { x: 0.72, y: top },
+      { x: 0.72, y: 0.6 },
+      { x: 0.44, y: 0.6 },
+      { x: 0.44, y: mid },
+      { x: 0.68, y: mid },
+      { x: 0.68, y: low },
+      { x: 0.44, y: low },
+      { x: 0.44, y: bottom },
+      { x: 0.18, y: bottom },
+    ],
+  }
+}
+
+function makeSuperThin(): ShapeConfig {
+  return {
+    id: 'shape-thin-rect',
+    name: 'Super Thin Rect',
+    kind: 'rect',
+    center: { x: 0.5, y: 0.82 },
+    width: 0.36,
+    height: 0.14,
+    cornerRadius: 0,
+  }
+}
+
+function makeFlippedL(): ShapeConfig {
+  const top = 0.52
+  const bottom = FLOOR_Y
+  const footBottom = top + 0.04
+  return {
+    id: 'shape-flipped-l',
+    name: 'Flipped L',
+    kind: 'polygon',
+    points: [
+      { x: 0.24, y: top },
+      { x: 0.80, y: top },
+      { x: 0.80, y: footBottom },
+      { x: 0.54, y: footBottom },
+      { x: 0.54, y: bottom },
+      { x: 0.24, y: bottom },
+    ],
+  }
 }
 
 export function evaluateFit(
@@ -312,4 +330,3 @@ function distancePointToSegment(p: Vec2, a: Vec2, b: Vec2) {
   const dy = p.y - projy
   return Math.sqrt(dx * dx + dy * dy)
 }
-
