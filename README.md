@@ -1,115 +1,73 @@
-# Shapeshift
+# React + TypeScript + Vite
 
-A "Hole in the Wall" game powered by computer vision. Match your body pose to the approaching wall cutouts before time runs out!
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Features
+Currently, two official plugins are available:
 
-- **Real-time pose detection** using MediaPipe Pose Landmarker
-- **Progressive difficulty** with checkpoints and increasing challenge
-- **Lives system** - start with 3 lives, earn more at checkpoints
-- **Arcade-style UI** with flashy animations and effects
-- **Keyboard controls** - Space/Enter to start, ESC to pause
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Getting Started
+## React Compiler
 
-### Prerequisites
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- Node.js 18+ 
-- A webcam
-- Modern browser with WebGL support
+## Expanding the ESLint configuration
 
-### Installation
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```bash
-npm install
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-### Development
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```bash
-npm run dev
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-### Build
-
-```bash
-npm run build
-```
-
-### Preview Production Build
-
-```bash
-npm run preview
-```
-
-## How to Play
-
-1. **Start the game** - Click "START GAME" and allow camera access
-2. **Get in position** - Stand where your full body is visible
-3. **Match the shape** - A wall with a cutout will approach you
-4. **Strike the pose** - Match your body to the cyan silhouette
-5. **Beat the wall** - Hold the pose until the wall reaches you
-6. **Score points** - Better matches = more points!
-
-## Controls
-
-| Key | Action |
-|-----|--------|
-| `Space` / `Enter` | Start game / Continue |
-| `Escape` | Pause / Resume |
-
-## Difficulty Progression
-
-| Checkpoint | Rounds | Wall Speed | Poses |
-|------------|--------|------------|-------|
-| Warm Up | 1-5 | 4s | Easy poses |
-| Getting Started | 6-10 | 3.5s | Easy + Medium |
-| Challenge Mode | 11-15 | 3s | Medium |
-| Expert Zone | 16-20 | 2.5s | Medium + Hard |
-| Master Level | 21-25 | 2.2s | Hard |
-| Shapeshifter | 26+ | 2s | Hard + Expert |
-
-## Tech Stack
-
-- **React 19** - UI framework
-- **TypeScript** - Type safety
-- **Vite** - Build tool
-- **MediaPipe** - Pose detection
-- **Zustand** - State management
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push to GitHub
-2. Import project in Vercel
-3. Deploy!
-
-Or use the Vercel CLI:
-
-```bash
-npx vercel
-```
-
-### Netlify
-
-```bash
-npm run build
-# Deploy the `dist` folder
-```
-
-## Future Roadmap
-
-- [ ] Split-screen multiplayer
-- [ ] Online leaderboards
-- [ ] Sound effects and music
-- [ ] More pose shapes
-- [ ] Custom pose editor
-- [ ] Mobile touch controls
-
-## License
-
-MIT
-
